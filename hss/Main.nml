@@ -756,6 +756,32 @@ function rec find_subclass(c: class) {
 	}
 }
 
+function starts_with_grid(s) {
+	var i = neko("$sget32(s,0,false)");
+	if i == neko("null") then false else i == 0x64697267 // i == 'grid'
+}
+
+// make "span (2 / span) 3" => "(span 2) / (span 3)"
+function rec expand_grid(v) {
+	function rec join(a, b) (match (fst a, fst b) {
+	| (VOp(Div,a1,a2), VOp(Div,b1,b2)) -> VOp Div a1 (VOp Div (join a2 b1) b2, Lexer.punion(snd a2,snd b2))
+	| (VOp(Div,a1,a2), _) -> VOp Div a1 (join a2 b)
+	| (_, VOp(Div,b1,b2)) -> VOp Div (join a b1) b2
+	| (_, VGroup vl)      -> VGroup (a :: vl)
+	| _ -> VGroup [a; b]
+	} , Lexer.punion(snd a,snd b))
+	function rec loop(prev, vl) match vl {
+	| [] -> prev
+	| v :: vl -> join prev (loop v vl)
+	}
+	match (fst v) {
+	| VGroup (x::vl) -> loop x vl
+	| VList vl       -> (VList (List.map expand_grid vl), snd v)
+	| VLabel (s,v)   -> (VLabel s (expand_grid v), snd v)
+	| _ -> v
+	}
+}
+
 function load_rules(find, name, value, p) {
 	try {
 		var rules = find name
@@ -909,7 +935,7 @@ function rec check(ctx,e) {
 		ctx.curblock := snd old2;
 		(EBlock classes el,snd e)
 	| EAttribute (name,value) ->
-		var value = eval ctx value;
+		var value = eval ctx (if starts_with_grid name then expand_grid value else value);
 		match value {
 		| (VCall ((VIdent "CSS",_),[(VString _,_)]),_) -> e
 		| _ ->
@@ -1028,7 +1054,7 @@ function rec check(ctx,e) {
 				var p = pos e;
 				match fst e {
 				| EAttribute(name,value) ->
-					var value = eval ctx value;
+					var value = eval ctx (if starts_with_grid name then expand_grid value else value);
 					match value {
 					| (VCall ((VIdent "CSS",_),[(VString _,_)]),_) -> e
 					| _ ->

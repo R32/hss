@@ -421,7 +421,28 @@ var rules = List.concat [[
 	("justify-self", RId "auto" :: justify_items);
 	("order", [RInt]);
 	]
-}; {// animations
+}; {//grid
+	[
+	// ("grid", []);
+	// ("grid-area", []);
+	// ("grid-auto-columns", []);
+	// ("grid-auto-flow", []);
+	// ("grid-auto-rows", []);
+	// ("grid-column", []);
+	// ("grid-column-end", []);
+	// ("grid-column-start", []);
+	// ("grid-column-gap", []);
+	// ("grid-gap", []);
+	// ("grid-row", []);
+	// ("grid-row-end", []);
+	// ("grid-row-start", []);
+	// ("grid-row-gap", []);
+	// ("grid-template", []);
+	// ("grid-template-areas", []);
+	// ("grid-template-columns", []);
+	// ("grid-template-rows", []);
+	]
+};{// animations
 	var name  = ROr [RIdent]
 	var dir   = ROr [RId "normal"; RId "reverse"; RId "alternate"; RId "alternate-reverse"]
 	var mode  = ROr [none; RId "forwards"; RId "backwards"; RId "both"]
