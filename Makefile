@@ -17,7 +17,7 @@ clean:
 	rm -rf *.n hss/*.n $(BYCODE) $(TARGET) test/test.css
 
 test: $(BYCODE)
-	neko $< --append -rule test/test.rules test/test.hss
+	neko $< -D rule-append -rule test/test.rules test/test.hss
 
 .PHONY: test release clean
 

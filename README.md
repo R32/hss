@@ -2,26 +2,27 @@
 
 ## Usage
 
-1. Download and then build via `make` or `build.bat`
+1. Download and build using either `make` or `build.bat` (requires Haxe/Neko installed)
 
-2. Copy these files to the executable path : `hss.exe` (or `hss`), [css.rules](bin/css.rules), and `monitor.ndll`(Windows only, optional).
+2. Copy these files to the executable path :
 
-You can compile your HSS file into the corresponding CSS file by running the hss command :
+   - `hss.exe` (or `hss` on non-Windows systems)
+   - [css.rules](bin/css.rules)
+   - `monitor.ndll`(Windows only, optional)
 
-```bash
-#hss [options] <file>
-# Options :
-#  --watch       : monitor <file> changes (Windows only, requires monitor.ndll to load first)
-#  -output <dir> : specify output directory
-#  -rule <file>  : specify a css rule set file
-#  -D <flag>     : define a conditional compilation flag
-#  --append      : available only if '-rule <file>' is specified
-#  --minify      : minify output by removing some whitespaces
-#  --stdout      : output to stdout
-#  --sourcemap   : outputs a v3 sourcemap file
-#
-hss myfile.hss
-```
+3. To compile your hss file into css, run :
+
+   ```bash
+   # hss [options] <file>
+   #  Options :
+   #   --watch       : monitor <file> changes (Windows only, requires monitor.ndll to load first)
+   #   -output <dir> : specify output directory
+   #   -rule <file>  : specify a css rule set file
+   #   -D <flag>     : define a conditional compilation flag
+   #   --minify      : minify output by removing some whitespaces
+   #   --stdout      : output to stdout
+   #   --sourcemap   : outputs a v3 sourcemap file
+   ```
 
 Features:
 * [Customizable CSS rules](#Customizable-CSS-rules) version 2.0+
@@ -352,7 +353,9 @@ Operations between two different units (for instance 50px + 3em) are not allowed
 
 ### Hacks Support
 
-* `-D merge-media` : The `media queries` will be merged.
+* `-D merge-media` : Try to merge the `@media` queries.
+
+* `-D rule-append` : Appends `-rule my.rules` to the defaults.
 
 * The input name could be `stdin`.
 

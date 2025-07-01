@@ -730,18 +730,17 @@ function loadfile(rule, cssdir) {
 	var chs = IO.read_file (*file) true
 	var lex = Lexer.create Buffer.create();
 	Lexer.input lex (*file) chs 1 0;
-	var el = Hss.Parser.parse(begin, lex);
+	var el = parse(begin, lex);
 	List.iter (recording context) el;
 }
 
-var mode_append = &false
 var file_custom = &""
 var loaded = &false
 function load(def, cssdir) {
 	var input = *file_custom;
 	try {
 		if *loaded then throw Exit
-		if (input == "" || *mode_append == true) then
+		if (input == "" || defines_has "rule_append") then
 			loadfile(def, cssdir);
 		if (input != "") then
 			loadfile(input, cssdir);
@@ -755,9 +754,6 @@ function load(def, cssdir) {
 	| Core.Error s ->
 		IO.printf IO.stderr "Check skipped: %s not found.\n" s
 	}
-}
-function append() {
-	mode_append := true
 }
 
 function custom(f) {
